@@ -5228,7 +5228,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1117301506789752111}
   - component: {fileID: 8852925677314817119}
-  - component: {fileID: 3410251766850529897}
   m_Layer: 6
   m_Name: Hitscan
   m_TagString: Untagged
@@ -5274,25 +5273,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3410251766850529897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960898127374129522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fca3ea3c0e693a4ab175a577f78394b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponType: 1
-  Ammunition: 10
-  Snopp: 100
-  ignoreHitMask:
-    serializedVersion: 2
-    m_Bits: 196
-  hirParticle: {fileID: 1830224549362327913}
 --- !u!1 &5320673861248019107
 GameObject:
   m_ObjectHideFlags: 0

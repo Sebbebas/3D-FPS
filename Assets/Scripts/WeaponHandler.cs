@@ -7,6 +7,7 @@ public enum WeaponState
     Unarmed = 0,
     HitScan = 1,
     Projectile = 2,
+    Rifle = 3,
     Total
 }
 
@@ -23,12 +24,29 @@ public class WeaponHandler : MonoBehaviour
     private void Update()
     {
         HandleWeaponSwap();
+        ActivateWeapon();
 
-        if (Input.GetMouseButtonDown(0) &&CurrentWeapon != null)
+        if (Input.GetMouseButtonDown(0) && CurrentWeapon != null)
         {
             CurrentWeapon.Fire();
         }
     }
+
+    private void ActivateWeapon()
+    {
+        foreach (var weapon in AvailableWeapons)
+        {
+            if (CurrentWeapon == weapon)
+            {
+                weapon.gameObject.SetActive(true);
+            }
+            else
+            {
+                weapon.gameObject.SetActive(false);
+            }
+        }
+    }
+
 
     private void HandleWeaponSwap()
     {

@@ -7,7 +7,7 @@ public class HitScanWeapon : Weapon
 {
     public new void Start()
     {
-        hirParticle.gameObject.SetActive(false);
+        hitParticle.gameObject.SetActive(false);
         base.Start();
     }
 
@@ -27,8 +27,8 @@ public class HitScanWeapon : Weapon
         RaycastHit hit = new();
         if (Physics.Raycast(weaponRay, out hit, weaponRange, ignoreHitMask))
         {
-            hirParticle.transform.position = hit.point;
-            hirParticle.gameObject.SetActive(true);
+            hitParticle.transform.position = hit.point;
+            hitParticle.gameObject.SetActive(true);
         }
     }
 }

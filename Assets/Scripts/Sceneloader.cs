@@ -1,73 +1,174 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class Sceneloader : MonoBehaviour
+public class SceneLoader : MonoBehaviour
 {
-    //Next Scene transition
-    [Header("Transition")]
-    [SerializeField] Animation[] animations;
+    //--HOW TO USE--
+    //PlayAction(int); is used to trigger a specific actionType from SceneActions[]
+    //Example: SceneActions[1].actionType = 2 ("loadScene"). If you want to trigger that specific action PlayAction(1) since that is the actionType that correlates with loadScene;
+    //Its a bit scuffed
 
-    //Reload scene when collide
-    [Header("Death")]
-    [SerializeField] Collider[] colliders;
-    [SerializeField] LayerMask killLayers;
+    #region Variables
+    //Configurable Parameters
+    [Header("Actions")]
+    [SerializeField] SceneActions[] actions;
 
-    //Quit
-    [Header("QuitGame")]
-    [SerializeField] Quiting[] quitLife;
+    [System.Serializable]
+    public struct SceneActions
+    {
+        //ENUMS
+        public enum AnimatorVariable
+        {
+            isBool = 0,
+            isTrigger = 1,
+            isFloat = 2,
+            isInt = 3
+        }
+        public enum ActionType
+        {
+            reloadScene = 0,
+            loadScene = 1,
+            quit = 2
+        }
 
-    [Header("OLD")]
-    [SerializeField] float transitionTime = 1.5f;
-    [SerializeField] int quitTime = 1;
+        //Variables
+        [Header("Scene")]
+        [Tooltip("The type of action")] public ActionType actionType;
+        [Tooltip("Load scene")] public int scene;
+        [Tooltip("Seconds before action")] public float transitionTime;
 
-    //Loads a certian Scene
+        [Header("Key's")]
+        [SerializeField] string reloadKey;
+        [SerializeField] string loadNextScene;
+        [SerializeField] string quit;
+
+        [Header("Animations")]
+        [Tooltip("Animator")] public Animator animator;
+
+        [Header("Parameters")]
+        [Tooltip("Animator parameter type")] public AnimatorVariable parameterType;
+        [Tooltip("Animator parameter name")] public string parameterName;
+        [Tooltip("Animator parameter value")] public float parameterValue;
+    }
+    #endregion
+
+    #region Base Scene Actions
+    /// <summary>
+    /// Loads <paramref name="sceneNumber"/> as the next scene
+    /// </summary>
     public void LoadSceneNumber(int sceneNumber)
     {
-        StartCoroutine(ChangeSceneRoutine(sceneNumber));
+        SceneManager.LoadScene(sceneNumber);
     }
 
-    IEnumerator ChangeSceneRoutine(int scene)
+    /// <summary>
+    /// Loads Next Scene
+    /// </summary>
+    public void LoadNextScene()
     {
-        yield return new WaitForSeconds(transitionTime);
-        SceneManager.LoadScene(scene);
+        LoadSceneNumber(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    //Reload Scene
+    /// <summary>
+    /// Reload the current scene
+    /// </summary>
     public void ReloadScene()
     {
-        StartCoroutine(ReloaadSceneRoutine());
-    }
-
-    IEnumerator ReloaadSceneRoutine()
-    {
-        yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    //Quits the game
+    /// <summary>
+    /// Quits the application
+    /// </summary>
     public void Quit()
     {
-        StartCoroutine(QuitGameRoutine());
-    }
-
-    IEnumerator QuitGameRoutine()
-    {
-        yield return new WaitForSeconds(quitTime);
         Application.Quit();
         Debug.Log("Quit");
     }
+    #endregion
 
-    [System.Serializable] public struct Animation
-    {
-        [Tooltip("Animator")]public Animator animator;
-        [Tooltip("bool name")]public string name;
-        public float transitionTime;
-    }
-    [System.Serializable] public struct Quiting
+    #region KEY
+    void OnPressKey()
     {
         
     }
+    #endregion
+
+    #region Action Functions
+    /// <summary>
+    /// <paramref name="actionNumber"/> is supposed to be the responding actionType that is meant to be played | 0 = reloadScene 1 = loadScene 2 = quit
+    /// </summary>
+    public void PlayAction(int actionNumber)
+    {
+        foreach (SceneActions animation in actions)
+        {
+            if ((int)animation.actionType == actionNumber)
+            {
+                StartCoroutine(TransitionRoutine(animation.transitionTime));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Plays out all the actions in actions[] after <paramref name="transitionTime"/>
+    /// </summary>
+    IEnumerator TransitionRoutine(float transitionTime)
+    {
+        PlayAnimations();
+
+        yield return new WaitForSeconds(transitionTime);
+
+        foreach (SceneActions animation in actions)
+        {
+            switch (animation.actionType)
+            {
+                //ReloadScene
+                case (SceneActions.ActionType)0:
+                    ReloadScene();
+                    break;
+                //LoadScene
+                case (SceneActions.ActionType)1:
+                    LoadSceneNumber(animation.scene);
+                    break;
+                //Quit
+                case (SceneActions.ActionType)2:
+                    Quit();
+                    break;
+            }
+        }
+    }
+    #endregion
+
+    #region Animations
+    void PlayAnimations()
+    {
+        foreach (SceneActions animation in actions)
+        {
+            if (animation.animator == null) { Debug.Log("Missing Animator"); return; }
+
+            switch (animation.parameterType)
+            {
+                //is bool
+                case (SceneActions.AnimatorVariable)0:
+                    animation.animator.SetBool(animation.parameterName, true);
+                    break;
+                //is trigger
+                case (SceneActions.AnimatorVariable)1:
+                    animation.animator.SetTrigger(animation.parameterName);
+                    break;
+                //is float
+                case (SceneActions.AnimatorVariable)2:
+                    animation.animator.SetFloat(animation.parameterName, animation.parameterValue);
+                    break;
+                //is int
+                case (SceneActions.AnimatorVariable)3:
+                    animation.animator.SetInteger(animation.parameterName, (int)animation.parameterValue);
+                    break;
+            }
+        }
+    }
+    #endregion
 }
