@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpCooldown = 0.5f;
     //Ground Check
     [SerializeField] LayerMask groundCheckLayerMask;
-    [SerializeField] Vector2 groundCheckPos;
+    [SerializeField] Vector3 groundCheckPos;
     [SerializeField] float groundCheckRadius = 0.5f;
 
     Vector2 moveInput;
@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     void IsGrounded()
     {
-        if (Physics.CheckSphere(new(transform.position.x + groundCheckPos.x, transform.position.y + groundCheckPos.y), groundCheckRadius, groundCheckLayerMask) && jumpCooldown == 0f)
+        if (Physics.CheckSphere(new(transform.position.x + groundCheckPos.x, transform.position.y + groundCheckPos.y, transform.position.z + groundCheckPos.z), groundCheckRadius, groundCheckLayerMask) && jumpCooldown == 0f)
         {
             isGrounded = true;
         }
@@ -75,6 +75,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(new(transform.position.x + groundCheckPos.x, transform.position.y + groundCheckPos.y), groundCheckRadius);
+        Gizmos.DrawWireSphere(new(transform.position.x + groundCheckPos.x, transform.position.y + groundCheckPos.y, transform.position.z + groundCheckPos.z), groundCheckRadius);
     }
 }
