@@ -527,7 +527,7 @@ PrefabInstance:
       objectReference: {fileID: 1118515448055951951}
     - target: {fileID: 2676296887889366335, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2751482043136200858, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: ammoText
@@ -559,15 +559,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4975903671704877127, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.052335996
       objectReference: {fileID: 0}
     - target: {fileID: 4975903671704877127, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 1
+      value: 0.99862957
       objectReference: {fileID: 0}
     - target: {fileID: 4975903671704877127, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 174
       objectReference: {fileID: 0}
     - target: {fileID: 5158913156480428281, guid: 41ee6ba174d277146b1110882820d6b1, type: 3}
       propertyPath: m_IsActive
